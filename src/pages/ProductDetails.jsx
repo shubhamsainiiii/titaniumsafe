@@ -17,6 +17,8 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 import ReviewCard from "../components/ReviewCard";
+import ReviewForm from "../components/ReviewForm";
+
 
 const ProductDetails = () => {
 
@@ -265,7 +267,7 @@ const ProductDetails = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleBuyNow}
-                                className="flex-1 bg-[#D4AF37] text-[#0F172A] py-4 rounded-full font-semibold flex items-center justify-center gap-3"
+                                className="flex-1 bg-[#D4AF37] text-[#0F172A] py-4 rounded-full font-semibold flex items-center justify-center gap-3 cursor-pointer"
                             >
                                 <FaWhatsapp />
                                 Buy Now
@@ -275,7 +277,7 @@ const ProductDetails = () => {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleKnowMore}
-                                className="flex-1 border border-[#D4AF37] text-[#D4AF37] py-4 rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0F172A] transition-all duration-300"
+                                className="flex-1 border border-[#D4AF37] text-[#D4AF37] py-4 rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0F172A] transition-all duration-300 cursor-pointer"
                             >
                                 Know More
                             </motion.button>
@@ -342,6 +344,21 @@ const ProductDetails = () => {
                         ))}
 
                     </Swiper>
+                    {/* Review Form */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 80 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="mt-24"
+                    >
+
+                        <div className="max-w-3xl mx-auto">
+
+                            <ReviewForm productId={product._id} />
+
+                        </div>
+
+                    </motion.div>
 
                 </motion.div>
 
