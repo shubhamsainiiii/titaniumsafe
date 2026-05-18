@@ -17,7 +17,7 @@ const Loader = () => {
                     }}
                     transition={{
                         repeat: Infinity,
-                        duration: 2,
+                        duration: 1,
                         ease: "linear",
                     }}
                     className="w-28 h-28 border-4 border-[#D4AF37]/20 border-t-[#D4AF37] rounded-full flex items-center justify-center"
@@ -30,7 +30,7 @@ const Loader = () => {
                         }}
                         transition={{
                             repeat: Infinity,
-                            duration: 1.5,
+                            duration: 1,
                         }}
                     >
 
