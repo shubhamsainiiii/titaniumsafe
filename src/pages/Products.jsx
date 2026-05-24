@@ -1,79 +1,86 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, {
+    useEffect,
+    useState,
+} from "react";
+
 import ProductCard from "../components/ProductCard";
-import { FaSearch } from "react-icons/fa";
+
+import {
+    FaSearch,
+} from "react-icons/fa";
+
+import api from "../services/api";
 
 const Products = () => {
 
-    // Dummy Products
-    const allProducts = [
-        {
-            _id: 1,
-            name: "Titanium Safe X1",
-            description:
-                "Premium heavy-duty titanium safe with advanced digital locking system and fire-resistant protection.",
-            price: 25000,
-            available: true,
-            images: [
-                "https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=1200&auto=format&fit=crop",
-            ],
-        },
+    // ==========================
+    // States
+    // ==========================
+    const [products, setProducts] =
+        useState([]);
 
-        {
-            _id: 2,
-            name: "Office Vault Pro",
-            description:
-                "Modern office security vault designed for documents, cash, and confidential items.",
-            price: 42000,
-            available: true,
-            images: [
-                "https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=1200&auto=format&fit=crop",
-            ],
-        },
+    const [loading, setLoading] =
+        useState(true);
 
-        {
-            _id: 3,
-            name: "Digital Locker Elite",
-            description:
-                "Advanced digital locker with fingerprint lock and premium steel body protection.",
-            price: 36000,
-            available: true,
-            images: [
-                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
-            ],
-        },
+    const [search, setSearch] =
+        useState("");
 
-        {
-            _id: 4,
-            name: "Fireproof Safe Ultra",
-            description:
-                "Fire-resistant premium safe designed for jewelry shops and high-value assets.",
-            price: 55000,
-            available: true,
-            images: [
-                "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
-            ],
-        },
+    // ==========================
+    // Fetch Products
+    // ==========================
+    const getProducts = async () => {
 
-        {
-            _id: 5,
-            name: "Home Security Safe",
-            description:
-                "Compact home security safe with digital password protection and strong locking mechanism.",
-            price: 18000,
-            available: true,
-            images: [
-                "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1200&auto=format&fit=crop",
-            ],
-        },
-    ];
+        try {
 
-    const [search, setSearch] = useState("");
+            setLoading(true);
 
+            const { data } =
+                await api.get(
+                    "/products/all"
+                );
+
+            // Only Available Products
+            const availableProducts =
+                data.products.filter(
+                    (item) => item.available
+                );
+
+            setProducts(
+                availableProducts
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+    };
+
+    // ==========================
+    // Use Effect
+    // ==========================
+    useEffect(() => {
+
+        getProducts();
+
+    }, []);
+
+    // ==========================
     // Filter Products
-    const filteredProducts = allProducts.filter((product) =>
-        product.name.toLowerCase().includes(search.toLowerCase())
-    );
+    // ==========================
+    const filteredProducts =
+        products.filter((product) =>
+            product.name
+                .toLowerCase()
+                .includes(
+                    search.toLowerCase()
+                )
+        );
 
     return (
         <div className="bg-[#0F172A] min-h-screen text-white pt-28">
@@ -84,19 +91,25 @@ const Products = () => {
                 <div className="text-center">
 
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">
+
                         Our Premium
-                        <span className="text-[#D4AF37]"> Products</span>
+                        <span className="text-[#D4AF37]">
+                            {" "}Products
+                        </span>
+
                     </h1>
 
                     <p className="text-gray-400 mt-5 text-lg max-w-3xl mx-auto leading-relaxed">
+
                         Explore our premium collection of modern safes,
                         digital lockers, office vaults, and advanced
                         security solutions.
+
                     </p>
 
                 </div>
 
-                {/* Search Bar */}
+                {/* Search */}
                 <div className="max-w-2xl mx-auto mt-12">
 
                     <div className="relative">
@@ -104,8 +117,13 @@ const Products = () => {
                         <input
                             type="text"
                             placeholder="Search products..."
+
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+
+                            onChange={(e) =>
+                                setSearch(e.target.value)
+                            }
+
                             className="w-full bg-[#111827] border border-[#D4AF37]/10 focus:border-[#D4AF37] outline-none px-6 py-4 rounded-full text-white pl-14"
                         />
 
@@ -115,31 +133,58 @@ const Products = () => {
 
                 </div>
 
-                {/* Products Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+                {/* Loading */}
+                {
+                    loading ? (
 
-                    {filteredProducts.length > 0 ? (
-                        filteredProducts.map((product) => (
-                            <ProductCard
-                                key={product._id}
-                                product={product}
-                            />
-                        ))
-                    ) : (
-                        <div className="col-span-full text-center py-20">
+                        <div className="flex items-center justify-center py-32">
 
-                            <h2 className="text-3xl font-bold text-white">
-                                No Products Found
-                            </h2>
-
-                            <p className="text-gray-400 mt-4">
-                                Try searching with another keyword.
-                            </p>
+                            <div className="w-14 h-14 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></div>
 
                         </div>
-                    )}
 
-                </div>
+                    ) : (
+
+                        <>
+                            {/* Products Grid */}
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+
+                                {
+                                    filteredProducts.length > 0 ? (
+
+                                        filteredProducts.map((product) => (
+
+                                            <ProductCard
+                                                key={product._id}
+                                                product={product}
+                                            />
+
+                                        ))
+
+                                    ) : (
+
+                                        <div className="col-span-full text-center py-20">
+
+                                            <h2 className="text-3xl font-bold text-white">
+
+                                                No Products Found
+
+                                            </h2>
+
+                                            <p className="text-gray-400 mt-4">
+
+                                                Try searching with another keyword.
+
+                                            </p>
+
+                                        </div>
+                                    )
+                                }
+
+                            </div>
+                        </>
+                    )
+                }
 
             </section>
 
